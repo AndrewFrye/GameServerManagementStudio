@@ -10,6 +10,10 @@ public class GameProcessBase
     protected readonly LogHandler _log;
     protected Process _process;
     protected ProcessStartInfo _processStartInfo;
+    public string InstanceId => _infoEntity.InstanceId;
+    public bool Running { get; private set; } = false;
+    protected StreamWriter _processInput;
+    
     public GameProcessBase(IGameInfoEntity infoEntity, IConfiguration config, LogHandler log)
     {
         _infoEntity = infoEntity;
@@ -61,8 +65,40 @@ public class GameProcessBase
         
         _process.BeginOutputReadLine();
         _process.BeginErrorReadLine();
+        _processInput = _process.StandardInput;
         
         _log.LogInfo($"Game process started successfully", _infoEntity.InstanceId);
+        Running = true;
         return true;
+    }
+    
+    public virtual async Task SendCommand(string command)
+    {
+        // Send a command to the game process
+        // This is where you would implement the logic to send commands to the game server
+        // For example, you might write to the StandardInput stream of the process.
+        
+        if (_processInput != null && !_processInput.BaseStream.CanWrite)
+        {
+            _log.LogError($"Cannot send command, process input stream is not writable", _infoEntity.InstanceId);
+            return;
+        }
+        
+        await _processInput.WriteLineAsync(command);
+    }
+    
+    public virtual async Task Stop()
+    {
+        // Stop the game process
+        // This is where you would implement the logic to stop the game server
+        // For example, you might use Process.Kill() to terminate the server process.
+        
+        if (_process != null && !_process.HasExited)
+        {
+            _log.LogInfo($"Stopping game process", _infoEntity.InstanceId);
+            SendCommand("stop");
+            await Task.Run(() => _process.WaitForExit());
+            _log.LogInfo($"Game process stopped successfully", _infoEntity.InstanceId);
+        }
     }
 }

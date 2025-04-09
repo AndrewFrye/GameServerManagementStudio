@@ -97,6 +97,15 @@ public class Worker : BackgroundService
 
             await Task.WhenAny(receiveTask, sendTask);
         }
+        
+        _logger.LogInformation("Worker stopping at: {time}", DateTimeOffset.Now);
+        _logHandler.LogUpdated -= OnLogUpdated;
+        while (GameProcesses.Count > 0)
+        {
+            var gameProcess = GameProcesses[0];
+            await gameProcess.Stop();
+            GameProcesses.RemoveAt(0);
+        }
     }
     
     private List<IGameInfoEntity> _gameInfoEntities { get; set; } = new List<IGameInfoEntity>();
@@ -217,5 +226,18 @@ public class Worker : BackgroundService
         
         
         await gameProcessBase.Start();
+    }
+    
+    private async Task Stop(string name)
+    {
+        var instance = GameProcesses.FirstOrDefault(x => x.InstanceId == name);
+        if (instance == null)
+        {
+            _logger.LogError("Instance not found: {name}", name);
+            await _broker.BroadcastOutputAsync($"Instance not found: {name}");
+            return;
+        }
+        
+        await instance.Stop();
     }
 }

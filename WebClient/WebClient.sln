@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServerManagementStudio.Data", "..\GameServerManagementStudio.Data\GameServerManagementStudio.Data\GameServerManagementStudio.Data.csproj", "{CBDE712E-0003-4E4E-9CDB-F06C2649A62B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient\WebClient.csproj", "{5A17FD25-0895-4313-A0DD-57C903B3785B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient.Browser", "WebClient\WebClient.Browser\WebClient.Browser.csproj", "{34DB76D1-92E3-41C0-B51F-9E4E907CBE95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient.Desktop", "WebClient\WebClient.Desktop\WebClient.Desktop.csproj", "{83D0ADEC-D8C9-4E06-9798-30712344841E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBDE712E-0003-4E4E-9CDB-F06C2649A62B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBDE712E-0003-4E4E-9CDB-F06C2649A62B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBDE712E-0003-4E4E-9CDB-F06C2649A62B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBDE712E-0003-4E4E-9CDB-F06C2649A62B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A17FD25-0895-4313-A0DD-57C903B3785B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A17FD25-0895-4313-A0DD-57C903B3785B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A17FD25-0895-4313-A0DD-57C903B3785B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A17FD25-0895-4313-A0DD-57C903B3785B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34DB76D1-92E3-41C0-B51F-9E4E907CBE95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34DB76D1-92E3-41C0-B51F-9E4E907CBE95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34DB76D1-92E3-41C0-B51F-9E4E907CBE95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34DB76D1-92E3-41C0-B51F-9E4E907CBE95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83D0ADEC-D8C9-4E06-9798-30712344841E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83D0ADEC-D8C9-4E06-9798-30712344841E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83D0ADEC-D8C9-4E06-9798-30712344841E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83D0ADEC-D8C9-4E06-9798-30712344841E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
