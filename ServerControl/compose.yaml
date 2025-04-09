@@ -1,0 +1,6 @@
+﻿services:
+  servercontrol:
+    image: servercontrol
+    build:
+      context: .
+      dockerfile: ServerControl/Dockerfile

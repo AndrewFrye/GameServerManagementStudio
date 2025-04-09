@@ -1,0 +1,3 @@
+# Exclude all .idea and .vscode folders recursively
+**/.idea/
+**/.vscode/
