@@ -73,6 +73,11 @@ public class Worker : BackgroundService
                         case "Start":
                             await Start(packet.Message);
                             break;
+                        case "Command":
+                            //For now only going to support running a single game process
+                            //Support for multiple comes later
+                            await GameProcesses[0].SendCommand(packet.Message);
+                            break;
                         default:
                             await _broker.BroadcastOutputAsync($"Unknown command: {packet.Command}");
                             break;
@@ -175,7 +180,7 @@ public class Worker : BackgroundService
         
         var message = new MessageEntity
         {
-            Command = "FetchServerInfos",
+            Command = "ReturnServerInfos",
             Message = jsonString,
             Source = "HubService"
         };

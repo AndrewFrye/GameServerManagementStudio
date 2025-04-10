@@ -13,11 +13,20 @@
     </Design.DataContext>
 
     <RelativePanel>
+        <StackPanel Name="ServerStartPanel" Margin="10, 5"
+                    RelativePanel.AlignTopWithPanel="True"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top" Width="150" Spacing="3">
+            <ComboBox Name="SelectServerComboBox"
+                      Height="30" Width="150"
+                      ItemsSource="{Binding SelectServerSource}"/>
+        </StackPanel>
         <StackPanel Name="ButtonPanel"
-                    Margin="10" RelativePanel.AlignTopWithPanel="True"
+                    Margin="10, 5" RelativePanel.Below="ServerStartPanel"
                     RelativePanel.AlignLeftWithPanel="True"
                     RelativePanel.AlignBottomWithPanel="True"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom" Width="150" Spacing="3">
 
             <Button Name="ConnectButton"

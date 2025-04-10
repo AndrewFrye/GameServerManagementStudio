@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GameServerManagementStudio.Data;
+using GameServerManagementStudio.Data.JSON.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
@@ -30,10 +33,25 @@ public partial class MainViewModel : ViewModelBase
             .Build();
 
         _connection.On<string>("ReceiveData",
-            message => { ConsoleText += $"[Received] {message}{Environment.NewLine}"; });
+            async message => { await OnDataRecieved(message); });
     }
 
     [ObservableProperty] string _commandInput = String.Empty;
+    
+    private List<string> _consoleLines = new();
+    public async Task OnDataRecieved(string packet)
+    {
+        var message = JsonConvert.DeserializeObject<MessageEntity>(packet);
+        if (message == null)
+            return;
+        else
+        {
+            switch (message.Command)
+            {
+                case 
+            }
+        }
+    }
 
     [RelayCommand]
     public async Task Send()
@@ -81,6 +99,7 @@ public partial class MainViewModel : ViewModelBase
             await _connection.InvokeAsync("Register");
             IsConnected = true;
             ConsoleText += "Connected to IOHub\n";
+            await FetchServerInfos();
         }
         catch (Exception ex)
         {
@@ -100,6 +119,35 @@ public partial class MainViewModel : ViewModelBase
         catch (Exception ex)
         {
             ConsoleText += $"[Error] Failed to disconnect: {ex.Message}\n";
+        }
+    }
+
+    private ObservableCollection<string> SelectServerSource { get; set; } = new();
+    private Dictionary<string, IGameInfoEntity> _serverInfos = new();
+    [ObservableProperty] private string _selectedServerString = String.Empty;
+    [ObservableProperty] private IGameInfoEntity _selectedServer;
+    
+    [RelayCommand]
+    public async Task FetchServerInfos()
+    {
+        if (!IsConnected)
+        {
+            ConsoleText += "[Error] Not connected to IOHub\n";
+            return;
+        }
+
+        try
+        {
+            var message = new MessageEntity
+            {
+                Command = "FetchServerInfos",
+                Source = "Client"
+            };
+            await _connection.InvokeAsync("SendToService", JsonConvert.SerializeObject(message));
+        }
+        catch (Exception ex)
+        {
+            ConsoleText += $"[Error] Failed to fetch server infos: {ex.Message}\n";
         }
     }
 }
