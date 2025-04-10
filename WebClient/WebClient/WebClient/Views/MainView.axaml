@@ -33,19 +33,30 @@
                     IsEnabled="{Binding IsConnected}"
                     Width="150" HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center" />
-
-            <Button Name="SendButton"
-                    Content="Send" Command="{Binding SendCommand}"
-                    Height="30"
-                    Width="150" HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center" />
         </StackPanel>
 
-        <TextBox Name="ConsoleTextBox" RelativePanel.AlignTopWithPanel="True"
-                 AcceptsReturn="True" RelativePanel.AlignBottomWithPanel="True"
-                 RelativePanel.AlignRightWithPanel="True" RelativePanel.RightOf="ButtonPanel"
-                 Margin="10" VerticalContentAlignment="Top" IsReadOnly="True"
-                 Text="{Binding ConsoleText}"/>
+
+        <TextBox Name="ConsoleTextBox" AcceptsReturn="True"
+                 VerticalContentAlignment="Top" IsReadOnly="True"
+                 Text="{Binding ConsoleText}"
+                 RelativePanel.AlignTopWithPanel="True"
+                 RelativePanel.AlignRightWithPanel="True"
+                 RelativePanel.RightOf="ButtonPanel"
+                 RelativePanel.Above="SendButton" />
+
+
+        <TextBox Name="InputTextBox" RelativePanel.AlignBottomWithPanel="True"
+                 RelativePanel.LeftOf="SendButton" Height="30"
+                 RelativePanel.AlignLeftWith="ConsoleTextBox"
+                 RelativePanel.RightOf="ButtonPanel"/>
+        
+        <Button Name="SendButton"
+                Content="Send" Command="{Binding SendCommand}"
+                Height="30" RelativePanel.AlignRightWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True"
+                Width="150" HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" />
+
 
     </RelativePanel>
 </UserControl>
