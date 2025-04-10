@@ -48,10 +48,35 @@ public partial class MainViewModel : ViewModelBase
         {
             switch (message.Command)
             {
-                case 
+                case "Log":
+                    _consoleLines.Add(message.Message);
+                    while (_consoleLines.Count > 100)
+                        _consoleLines.RemoveAt(0);
+                    
+                    ConsoleText = String.Join("\n", _consoleLines);
+                    break;
+                case "ReturnServerInfos":
+                    await ServerInfosRecieved(message.Message);
+                    break;
             }
         }
     }
+    
+    private async Task ServerInfosRecieved(string infos)
+    {
+        var serverInfos = JsonConvert.DeserializeObject<List<IGameInfoEntity>>(infos);
+        if (serverInfos == null)
+            return;
+        
+        SelectServerSource.Clear();
+        _serverInfos.Clear();
+        foreach (var serverInfo in serverInfos)
+        {
+            SelectServerSource.Add(serverInfo.InstanceId);
+            _serverInfos.Add(serverInfo.InstanceId, serverInfo);
+        }
+    }
+    
 
     [RelayCommand]
     public async Task Send()
@@ -122,7 +147,7 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    private ObservableCollection<string> SelectServerSource { get; set; } = new();
+    public ObservableCollection<string> SelectServerSource { get; set; } = new();
     private Dictionary<string, IGameInfoEntity> _serverInfos = new();
     [ObservableProperty] private string _selectedServerString = String.Empty;
     [ObservableProperty] private IGameInfoEntity _selectedServer;
