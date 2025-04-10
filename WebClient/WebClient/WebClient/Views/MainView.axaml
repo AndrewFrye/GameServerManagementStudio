@@ -6,11 +6,46 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="WebClient.Views.MainView"
              x:DataType="vm:MainViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
-  </Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <RelativePanel>
+        <StackPanel Name="ButtonPanel"
+                    Margin="10" RelativePanel.AlignTopWithPanel="True"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignBottomWithPanel="True"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom" Width="150" Spacing="3">
+
+            <Button Name="ConnectButton"
+                    Content="Connect" Command="{Binding ConnectCommand}"
+                    Height="30"
+                    IsEnabled="{Binding !IsConnected}"
+                    Width="150" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" />
+
+            <Button Name="DisconnectButton"
+                    Content="Disconnect" Command="{Binding DisconnectCommand}"
+                    Height="30"
+                    IsEnabled="{Binding IsConnected}"
+                    Width="150" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" />
+
+            <Button Name="SendButton"
+                    Content="Send" Command="{Binding SendCommand}"
+                    Height="30"
+                    Width="150" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" />
+        </StackPanel>
+
+        <TextBox Name="ConsoleTextBox" RelativePanel.AlignTopWithPanel="True"
+                 AcceptsReturn="True" RelativePanel.AlignBottomWithPanel="True"
+                 RelativePanel.AlignRightWithPanel="True" RelativePanel.RightOf="ButtonPanel"
+                 Margin="10" VerticalContentAlignment="Top" IsReadOnly="True"
+                 Text="{Binding ConsoleText}"/>
+
+    </RelativePanel>
 </UserControl>
