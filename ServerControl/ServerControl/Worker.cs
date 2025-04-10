@@ -114,6 +114,7 @@ public class Worker : BackgroundService
     }
     
     private List<IGameInfoEntity> _gameInfoEntities { get; set; } = new List<IGameInfoEntity>();
+    private List<string> _infoStrings { get; set; } = new();
 
     private async Task FetchServerInfos()
     {
@@ -154,6 +155,7 @@ public class Worker : BackgroundService
                 gameInfoEntity.Init();
                 _gameInfoEntities.Add(gameInfoEntity);
                 _logger.LogInformation("Deserialized entity of type {type} from: {path}", gameInfoWrapper.EntityType, result.Path);
+                _infoStrings.Add(jsonString);
             }
             else
             {
@@ -176,7 +178,7 @@ public class Worker : BackgroundService
             return;
         }
         
-        var jsonString = JsonConvert.SerializeObject(_gameInfoEntities);
+        var jsonString = JsonConvert.SerializeObject(_infoStrings);
         
         var message = new MessageEntity
         {
