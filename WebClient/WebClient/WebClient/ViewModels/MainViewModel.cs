@@ -64,16 +64,25 @@ public partial class MainViewModel : ViewModelBase
     
     private async Task ServerInfosRecieved(string infos)
     {
-        var serverInfos = JsonConvert.DeserializeObject<List<IGameInfoEntity>>(infos);
+        var serverInfos = JsonConvert.DeserializeObject<List<GameInfoWrapperEntity>>(infos);
         if (serverInfos == null)
             return;
         
         SelectServerSource.Clear();
         _serverInfos.Clear();
-        foreach (var serverInfo in serverInfos)
+
+        foreach (var gameInfoWrapper in serverInfos)
         {
-            SelectServerSource.Add(serverInfo.InstanceId);
-            _serverInfos.Add(serverInfo.InstanceId, serverInfo);
+            IGameInfoEntity? gameInfoEntity = gameInfoWrapper.EntityType switch
+            {
+                "MinecraftInfoEntity" => gameInfoWrapper.GameInfo?.ToObject<MinecraftInfoEntity>(),
+                // Add other entity types here as needed
+                _ => null
+            };
+            
+            gameInfoEntity.Init();
+            _serverInfos.Add(gameInfoEntity.InstanceId, gameInfoEntity);
+            SelectServerSource.Add(gameInfoEntity.InstanceId);
         }
     }
     

@@ -17,6 +17,11 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(builder.Configuration.GetValue<int>("Port"));
+});
+
 var app = builder.Build();
 app.UseRouting();
 
