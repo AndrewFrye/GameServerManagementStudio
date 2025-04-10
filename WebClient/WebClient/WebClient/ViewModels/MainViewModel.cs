@@ -1,10 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GameServerManagementStudio.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 
 
 namespace WebClient.ViewModels;
@@ -20,17 +23,17 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel(IConfiguration configuration)
     {
         _configuration = configuration;
-        
+
         _connection = new HubConnectionBuilder()
             .WithUrl($"http://{_configuration["HostName"]}:{_configuration["Port"]}/iohub")
             .WithAutomaticReconnect()
             .Build();
 
-        _connection.On<string>("ReceiveData", message =>
-        {
-            ConsoleText += $"[Received] {message}{Environment.NewLine}";
-        });
+        _connection.On<string>("ReceiveData",
+            message => { ConsoleText += $"[Received] {message}{Environment.NewLine}"; });
     }
+
+    [ObservableProperty] string _commandInput = String.Empty;
 
     [RelayCommand]
     public async Task Send()
@@ -41,16 +44,34 @@ public partial class MainViewModel : ViewModelBase
             return;
         }
 
+        if (String.IsNullOrWhiteSpace(CommandInput))
+        {
+            return;
+        }
+        
         try
         {
-            await SendFileContents();
+            var message = await EncodeCommand(CommandInput);
+            await _connection.InvokeAsync("SendToService", message);
         }
         catch (Exception ex)
         {
-            ConsoleText += $"[Error] Failed to send file contents: {ex.Message}\n";
+            ConsoleText += $"[Error] Failed to send command: {ex.Message}\n";
         }
     }
-    
+
+    private async Task<string> EncodeCommand(string command)
+    {
+        var message = new MessageEntity()
+        {
+            Command = "Command",
+            Source = "Client",
+            Message = command
+        };
+
+        return await Task.Run(() => JsonConvert.SerializeObject(message));
+    }
+
     [RelayCommand]
     public async Task Connect()
     {
@@ -66,7 +87,7 @@ public partial class MainViewModel : ViewModelBase
             ConsoleText += $"[Error] Failed to connect: {ex.Message}\n";
         }
     }
-    
+
     [RelayCommand]
     public async Task Disconnect()
     {
@@ -79,22 +100,6 @@ public partial class MainViewModel : ViewModelBase
         catch (Exception ex)
         {
             ConsoleText += $"[Error] Failed to disconnect: {ex.Message}\n";
-        }
-    }
-    
-    private async Task SendFileContents()
-    {
-        string _filePath = "D:\\Code\\GameServerManagementStudio\\ClientTesting\\ClientTesting\\message.json";
-        
-        try
-        {
-            var fileContents = await File.ReadAllTextAsync(_filePath);
-            await _connection.InvokeAsync("SendToService", fileContents);
-            ConsoleText += $"[File Sent] {fileContents}\n";
-        }
-        catch (Exception ex)
-        {
-            ConsoleText += $"[Error] Failed to send file contents: {ex.Message}\n";
         }
     }
 }

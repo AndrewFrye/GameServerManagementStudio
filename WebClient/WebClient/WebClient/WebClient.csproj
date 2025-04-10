@@ -32,4 +32,8 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\GameServerManagementStudio.Data\GameServerManagementStudio.Data\GameServerManagementStudio.Data.csproj" />
+    </ItemGroup>
 </Project>

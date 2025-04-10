@@ -35,27 +35,41 @@
                     VerticalContentAlignment="Center" />
         </StackPanel>
 
+        <Grid Name="ConsoleGrid" Margin="5"
+              RelativePanel.RightOf="ButtonPanel"
+              RelativePanel.AlignTopWithPanel="True"
+              RelativePanel.AlignRightWithPanel="True"
+              RelativePanel.AlignBottomWithPanel="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="75" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
+            
+            <TextBox Name="ConsoleTextBox" AcceptsReturn="True" Margin="5"
+                     VerticalContentAlignment="Top" IsReadOnly="True" TextWrapping="Wrap"
+                     Text="{Binding ConsoleText}"
+                     Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+            
+            <TextBox Name="InputTextBox" Grid.Row="1" Grid.Column="0" 
+                     Margin="5" Text="{Binding CommandInput}"/>
+            
+            <Button Name="SendButton" Margin="5" HorizontalAlignment="Stretch"
+                    Content="Send" Command="{Binding SendCommand}"
+                    Height="30" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" 
+                    Grid.Column="1" Grid.Row="1"/>
+        </Grid>
 
-        <TextBox Name="ConsoleTextBox" AcceptsReturn="True"
-                 VerticalContentAlignment="Top" IsReadOnly="True"
-                 Text="{Binding ConsoleText}"
-                 RelativePanel.AlignTopWithPanel="True"
-                 RelativePanel.AlignRightWithPanel="True"
-                 RelativePanel.RightOf="ButtonPanel"
-                 RelativePanel.Above="SendButton" />
-
-
-        <TextBox Name="InputTextBox" RelativePanel.AlignBottomWithPanel="True"
-                 RelativePanel.LeftOf="SendButton" Height="30"
-                 RelativePanel.AlignLeftWith="ConsoleTextBox"
-                 RelativePanel.RightOf="ButtonPanel"/>
         
-        <Button Name="SendButton"
-                Content="Send" Command="{Binding SendCommand}"
-                Height="30" RelativePanel.AlignRightWithPanel="True"
-                RelativePanel.AlignBottomWithPanel="True"
-                Width="150" HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center" />
+
+
+        
+        
+        
 
 
     </RelativePanel>
