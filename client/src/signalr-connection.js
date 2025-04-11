@@ -13,6 +13,7 @@ class Connector {
 
         this.connection.start()
             .then(() => console.log("Connected to SignalR hub"))
+            .then(() => {this.connection.invoke("Register")})
             .catch(err => console.error("Connection error:", err));
 
         // Listen for the "ReceiveData" event

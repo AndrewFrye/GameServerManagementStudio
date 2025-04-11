@@ -18,9 +18,16 @@ function App() {
         };
     }, []);
 
+    const testPacket = {
+        "Source": "Web Client",
+        "Command": "echo",
+        "Message": "Test Message"
+    };
+
     const sendMessage = () => {
         // Example of sending a message (if implemented in the backend)
-        Connector.connection.invoke("SendMessage", (new Date()).toISOString())
+        console.log(JSON.stringify(testPacket));
+        Connector.connection.invoke("SendToService", (JSON.stringify(testPacket)))
             .catch(err => console.error("Error sending message:", err));
     };
 
