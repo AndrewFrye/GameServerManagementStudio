@@ -73,6 +73,9 @@ public class Worker : BackgroundService
                         case "Start":
                             await Start(packet.Message);
                             break;
+                        case "Stop":
+                            await Stop(packet.Message);
+                            break;
                         case "Command":
                             //For now only going to support running a single game process
                             //Support for multiple comes later
