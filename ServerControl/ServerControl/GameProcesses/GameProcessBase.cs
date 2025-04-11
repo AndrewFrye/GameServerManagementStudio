@@ -65,7 +65,6 @@ public class GameProcessBase
         
         _process.BeginOutputReadLine();
         _process.BeginErrorReadLine();
-        _processInput = _process.StandardInput;
         
         _log.LogInfo($"Game process started successfully", _infoEntity.InstanceId);
         Running = true;
@@ -78,14 +77,17 @@ public class GameProcessBase
         // This is where you would implement the logic to send commands to the game server
         // For example, you might write to the StandardInput stream of the process.
         
-        if (_processInput != null && !_processInput.BaseStream.CanWrite)
+        _processInput = _process.StandardInput;
+
+        
+        if (!_processInput.BaseStream.CanWrite)
         {
             _log.LogError($"Cannot send command, process input stream is not writable", _infoEntity.InstanceId);
             return;
         }
-        Console.WriteLine(_processInput?.BaseStream.CanWrite);
         
-        await _processInput?.WriteLineAsync(command);
+        await _processInput.WriteLineAsync(command);
+        _processInput.BaseStream.Flush();
     }
     
     public virtual async Task Stop()
