@@ -192,7 +192,6 @@ public class Worker : BackgroundService
 
     private async Task EchoMessage(string message)
     {
-        Console.WriteLine("test");
         await _broker.BroadcastOutputAsync($"Echo: {message}");
     }
 

@@ -31,6 +31,7 @@ public class IOMessageBroker
 
     public async Task BroadcastOutputAsync(string message)
     {
+        Console.WriteLine($"Broadcasting message: {message}");
         foreach (var client in _clients.Values)
         {
             await client.SendAsync("ReceiveData", message);
