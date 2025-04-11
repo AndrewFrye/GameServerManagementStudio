@@ -210,6 +210,7 @@ public class Worker : BackgroundService
         {
             _logger.LogError("Instance not found: {name}", name);
             await _broker.BroadcastOutputAsync($"Instance not found: {name}");
+            await _broker.BroadcastOutputAsync($"Valid instances: {string.Join(", ", _gameInfoEntities.Select(x => x.InstanceId))}");
             return;
         }
         
