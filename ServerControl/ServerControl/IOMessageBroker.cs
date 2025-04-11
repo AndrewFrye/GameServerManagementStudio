@@ -22,6 +22,7 @@ public class IOMessageBroker
     public void RegisterClient(string connectionId, IClientProxy client)
     {
         _clients[connectionId] = client;
+        client.SendAsync("Registered");
     }
 
     public void UnregisterClient(string connectionId)
@@ -38,4 +39,5 @@ public class IOMessageBroker
             await client.SendAsync("ReceiveData", message);
         }
     }
+    
 }
