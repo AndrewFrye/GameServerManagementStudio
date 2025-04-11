@@ -70,4 +70,39 @@ public class MinecraftProcess : GameProcessBase
 
         return $"Java{javaVersion}";
     }
+    
+    public override async Task SendCommand(string command)
+    {
+        // Send a command to the game process
+        // This is where you would implement the logic to send commands to the game server
+        // For example, you might write to the StandardInput stream of the process.
+        
+        _processInput = _process.StandardInput;
+        Console.WriteLine("Sending command: " + command);
+        _log.LogInfo($"Sending command: {command}", _infoEntity.InstanceId);
+        
+        if (!_processInput.BaseStream.CanWrite)
+        {
+            _log.LogError($"Cannot send command, process input stream is not writable", _infoEntity.InstanceId);
+            return;
+        }
+        
+        await _processInput.WriteLineAsync(command);
+        _processInput.BaseStream.Flush();
+    }
+    
+    public override async Task Stop()
+    {
+        // Stop the game process
+        // This is where you would implement the logic to stop the game server
+        // For example, you might use Process.Kill() to terminate the server process.
+        
+        if (_process != null && !_process.HasExited)
+        {
+            _log.LogInfo($"Stopping game process", _infoEntity.InstanceId);
+            await SendCommand("stop");
+            await Task.Run(() => _process.WaitForExit());
+            _log.LogInfo($"Game process stopped successfully", _infoEntity.InstanceId);
+        }
+    }
 }
