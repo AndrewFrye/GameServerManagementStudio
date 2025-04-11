@@ -83,8 +83,9 @@ public class GameProcessBase
             _log.LogError($"Cannot send command, process input stream is not writable", _infoEntity.InstanceId);
             return;
         }
+        Console.WriteLine(_processInput?.BaseStream.CanWrite);
         
-        await _processInput.WriteLineAsync(command);
+        await _processInput?.WriteLineAsync(command);
     }
     
     public virtual async Task Stop()
@@ -96,7 +97,7 @@ public class GameProcessBase
         if (_process != null && !_process.HasExited)
         {
             _log.LogInfo($"Stopping game process", _infoEntity.InstanceId);
-            SendCommand("stop");
+            await SendCommand("stop");
             await Task.Run(() => _process.WaitForExit());
             _log.LogInfo($"Game process stopped successfully", _infoEntity.InstanceId);
         }
