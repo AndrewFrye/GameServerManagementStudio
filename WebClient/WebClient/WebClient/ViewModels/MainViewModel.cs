@@ -38,7 +38,7 @@ public partial class MainViewModel : ViewModelBase
     }
 
     [ObservableProperty] string _commandInput = String.Empty;
-    
+
     private List<string> _consoleLines = new();
     public async Task OnDataRecieved(string packet)
     {
@@ -47,13 +47,14 @@ public partial class MainViewModel : ViewModelBase
             return;
         else
         {
+            Console.WriteLine($"Received message: {message.Command} - {message.Message}");
             switch (message.Command)
             {
                 case "Log":
                     _consoleLines.Add(message.Message);
                     while (_consoleLines.Count > 100)
                         _consoleLines.RemoveAt(0);
-                    
+
                     ConsoleText = String.Join("\n", _consoleLines);
                     break;
                 case "ReturnServerInfos":
@@ -62,13 +63,13 @@ public partial class MainViewModel : ViewModelBase
             }
         }
     }
-    
+
     private async Task ServerInfosRecieved(string infos)
     {
         var serverInfos = JsonConvert.DeserializeObject<List<string>>(infos);
         if (serverInfos == null)
             return;
-        
+
         SelectServerSource.Clear();
         _serverInfos.Clear();
 
@@ -81,10 +82,10 @@ public partial class MainViewModel : ViewModelBase
                 // Add other entity types here as needed
                 _ => null
             };
-            
+
             if (gameInfoEntity == null)
                 continue;
-            
+
             gameInfoEntity.Init();
             _serverInfos.Add(gameInfoEntity.InstanceId, gameInfoEntity);
             SelectServerSource.Add(gameInfoEntity.InstanceId);
@@ -102,7 +103,7 @@ public partial class MainViewModel : ViewModelBase
                 Source = "Client",
                 Message = SelectedServerString
             };
-            
+
             await _connection.InvokeAsync("SendToService", JsonConvert.SerializeObject(message));
         }
     }
@@ -120,7 +121,7 @@ public partial class MainViewModel : ViewModelBase
         {
             return;
         }
-        
+
         try
         {
             var message = await EncodeCommand(CommandInput);
@@ -180,7 +181,7 @@ public partial class MainViewModel : ViewModelBase
     private Dictionary<string, IGameInfoEntity> _serverInfos = new();
     [ObservableProperty] private string _selectedServerString = String.Empty;
     [ObservableProperty] private IGameInfoEntity _selectedServer;
-    
+
     [RelayCommand]
     public async Task FetchServerInfos()
     {

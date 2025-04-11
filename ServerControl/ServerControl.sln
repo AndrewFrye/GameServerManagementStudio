@@ -9,8 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServerManagementStudio.Data", "..\GameServerManagementStudio.Data\GameServerManagementStudio.Data\GameServerManagementStudio.Data.csproj", "{B0EDD267-5807-4212-9090-4E1001A7848C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientTesting", "..\ClientTesting\ClientTesting\ClientTesting.csproj", "{7C0AD984-7149-47ED-A1E6-17B6130CA8FB}"
-EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

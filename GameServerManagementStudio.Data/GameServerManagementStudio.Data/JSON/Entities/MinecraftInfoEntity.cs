@@ -23,7 +23,8 @@ public class MinecraftInfoEntity : IGameInfoEntity
 
     public void Init()
     {
-        InstanceId = $"{GameName}_{PackName}";
+        if (string.IsNullOrEmpty(InstanceId))
+            InstanceId = $"{GameName}_{PackName}";
     }
     
 }
