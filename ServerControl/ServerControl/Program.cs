@@ -9,7 +9,15 @@ builder.Services.AddHostedService<Worker>();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IOMessageBroker>();
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -24,6 +32,8 @@ builder.WebHost.ConfigureKestrel(options =>
 
 var app = builder.Build();
 app.UseRouting();
+
+app.UseCors("AllowAll");
 
 app.UseEndpoints(endpoints =>
 {

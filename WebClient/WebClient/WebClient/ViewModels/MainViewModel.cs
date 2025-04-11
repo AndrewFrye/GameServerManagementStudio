@@ -11,6 +11,7 @@ using GameServerManagementStudio.Data.JSON.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 namespace WebClient.ViewModels;
@@ -64,28 +65,47 @@ public partial class MainViewModel : ViewModelBase
     
     private async Task ServerInfosRecieved(string infos)
     {
-        var serverInfos = JsonConvert.DeserializeObject<List<GameInfoWrapperEntity>>(infos);
+        var serverInfos = JsonConvert.DeserializeObject<List<string>>(infos);
         if (serverInfos == null)
             return;
         
         SelectServerSource.Clear();
         _serverInfos.Clear();
 
-        foreach (var gameInfoWrapper in serverInfos)
+        foreach (var gameInfoWrapperString in serverInfos)
         {
-            IGameInfoEntity? gameInfoEntity = gameInfoWrapper.EntityType switch
+            var gameInfoWrapper = JsonConvert.DeserializeObject<GameInfoWrapperEntity>(gameInfoWrapperString);
+            IGameInfoEntity? gameInfoEntity = gameInfoWrapper?.EntityType switch
             {
                 "MinecraftInfoEntity" => gameInfoWrapper.GameInfo?.ToObject<MinecraftInfoEntity>(),
                 // Add other entity types here as needed
                 _ => null
             };
             
+            if (gameInfoEntity == null)
+                continue;
+            
             gameInfoEntity.Init();
             _serverInfos.Add(gameInfoEntity.InstanceId, gameInfoEntity);
             SelectServerSource.Add(gameInfoEntity.InstanceId);
         }
     }
-    
+
+    [RelayCommand]
+    public async Task StartServer()
+    {
+        if (!String.IsNullOrWhiteSpace(SelectedServerString))
+        {
+            var message = new MessageEntity
+            {
+                Command = "Start",
+                Source = "Client",
+                Message = SelectedServerString
+            };
+            
+            await _connection.InvokeAsync("SendToService", JsonConvert.SerializeObject(message));
+        }
+    }
 
     [RelayCommand]
     public async Task Send()

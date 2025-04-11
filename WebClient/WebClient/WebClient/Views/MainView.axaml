@@ -19,8 +19,14 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top" Width="150" Spacing="3">
             <ComboBox Name="SelectServerComboBox"
-                      Height="30" Width="150"
+                      Height="30" Width="150" SelectedItem="{Binding SelectedServerString}"
                       ItemsSource="{Binding SelectServerSource}"/>
+            <Button Name="StartButton"
+                    Content="Start Server" Command="{Binding StartServerCommand}"
+                    Height="30" Width="150" 
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" />
+            
         </StackPanel>
         <StackPanel Name="ButtonPanel"
                     Margin="10, 5" RelativePanel.Below="ServerStartPanel"
@@ -60,7 +66,7 @@
             
             <TextBox Name="ConsoleTextBox" AcceptsReturn="True" Margin="5"
                      VerticalContentAlignment="Top" IsReadOnly="True" TextWrapping="Wrap"
-                     Text="{Binding ConsoleText}"
+                     Text="{Binding ConsoleText}" 
                      Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
             
             <TextBox Name="InputTextBox" Grid.Row="1" Grid.Column="0" 

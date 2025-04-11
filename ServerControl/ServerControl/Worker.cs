@@ -134,7 +134,7 @@ public class Worker : BackgroundService
         foreach (var result in results.Files)
         {
             _logger.LogInformation("Found info.json at: {path}", result.Path);
-            var jsonString = await File.ReadAllTextAsync(instanceDirectory + result.Path);
+            var jsonString = await File.ReadAllTextAsync(Path.Combine(instanceDirectory, result.Path));
             var gameInfoWrapper = JsonConvert.DeserializeObject<GameInfoWrapperEntity>(jsonString);
 
             if (gameInfoWrapper?.EntityType == null || gameInfoWrapper.GameInfo == null)
