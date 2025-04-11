@@ -78,6 +78,7 @@ public class GameProcessBase
         // For example, you might write to the StandardInput stream of the process.
         
         _processInput = _process.StandardInput;
+        Console.WriteLine("Sending command: " + command);
         _log.LogInfo($"Sending command: {command}", _infoEntity.InstanceId);
         
         if (!_processInput.BaseStream.CanWrite)
