@@ -12,9 +12,11 @@ builder.Services.AddSingleton<IOMessageBroker>();
 builder.Services.AddCors(options =>
 {
     var corsConfig = builder.Configuration.GetSection("Cors:AllowAll");
+    var origins = (corsConfig["Origins"] ?? "localhost").Split(',', StringSplitOptions.RemoveEmptyEntries);
+    
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins(corsConfig["Origins"] ?? "localhost")
+        policy.WithOrigins(origins)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
