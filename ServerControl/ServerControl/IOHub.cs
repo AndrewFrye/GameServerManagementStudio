@@ -21,6 +21,12 @@ public class IOHub : Hub
         _broker.RegisterClient(Context.ConnectionId, Clients.Client(Context.ConnectionId));
     }
     
+    public async Task OnConnectedAsync()
+    {
+        _broker.RegisterClient(Context.ConnectionId, Clients.Client(Context.ConnectionId));
+        await base.OnConnectedAsync();
+    }
+    
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         _broker.UnregisterClient(Context.ConnectionId);

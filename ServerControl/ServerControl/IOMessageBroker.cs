@@ -21,6 +21,7 @@ public class IOMessageBroker
 
     public void RegisterClient(string connectionId, IClientProxy client)
     {
+        Console.WriteLine($"Registering client: {connectionId}");
         _clients[connectionId] = client;
     }
 
